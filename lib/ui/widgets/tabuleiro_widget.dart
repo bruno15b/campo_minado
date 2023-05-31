@@ -16,9 +16,12 @@ class TabuleiroWidget extends StatelessWidget {
         child: GridView.count(
       crossAxisCount: tabuleiro.colunas,
       children: tabuleiro.campos
-          .map((c) => CampoWidget(campo: c, onAbrir: onAbrir, onAlternarMarcacao: onAlternarMarcacao))
+          .map((c) => CampoWidget(
+                campo: c,
+                onAbrir: onAbrir,
+                onAlternarMarcacao: onAlternarMarcacao,
+              ))
           .toList(),
-    )
-    );
+    ));
   }
 }

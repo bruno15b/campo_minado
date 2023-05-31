@@ -5,17 +5,43 @@ import 'package:campo_minado/ui/widgets/resultado_app_bar_widget.dart';
 import 'package:campo_minado/ui/widgets/tabuleiro_widget.dart';
 import 'package:flutter/material.dart';
 
-class CampoMinadoApp extends StatelessWidget {
+class CampoMinadoApp extends StatefulWidget {
+  @override
+  _CampoMinadoAppState createState() => _CampoMinadoAppState();
+}
+
+class _CampoMinadoAppState extends State<CampoMinadoApp> {
+  bool _venceu;
+  Tabuleiro _tabuleiro = Tabuleiro(linhas: 12, colunas: 12, qtdeBombas: 3);
+
   void _reiniciar() {
-    print("Reiniciou");
+    setState(() {
+      _venceu = null;
+      _tabuleiro.reiniciar();
+    });
   }
 
   void _abrir(Campo campo) {
-    print("Abrir");
+    setState(() {
+      try {
+        campo.abrir();
+        if (_tabuleiro.resolvido) {
+          _venceu = true;
+        }
+      } on ExplosaoException {
+        _venceu = false;
+        _tabuleiro.revelarBombas();
+      }
+    });
   }
 
   void _alternarMarcacao(Campo campo) {
-    print("alternar");
+    setState(() {
+      campo.alternarMarcacao();
+      if (_tabuleiro.resolvido) {
+        _venceu = true;
+      }
+    });
   }
 
   @override
@@ -34,12 +60,12 @@ class CampoMinadoApp extends StatelessWidget {
 
     return Scaffold(
       appBar: ResultadoAppBarWidget(
-        venceu: false,
+        venceu: _venceu,
         onReiniciar: _reiniciar,
       ),
       body: Container(
           child: TabuleiroWidget(
-        tabuleiro: Tabuleiro(linhas: 15, colunas: 15, qtdeBombas: 0),
+        tabuleiro: _tabuleiro,
         onAbrir: _abrir,
         onAlternarMarcacao: _alternarMarcacao,
       )),
