@@ -1,7 +1,8 @@
 import 'package:campo_minado/models/campo.dart';
 import 'package:campo_minado/models/explosao_exception.dart';
-import 'package:campo_minado/ui/pages/campo_widget.dart';
+import 'package:campo_minado/models/tabuleiro.dart';
 import 'package:campo_minado/ui/widgets/resultado_app_bar_widget.dart';
+import 'package:campo_minado/ui/widgets/tabuleiro_widget.dart';
 import 'package:flutter/material.dart';
 
 class CampoMinadoApp extends StatelessWidget {
@@ -27,24 +28,21 @@ class CampoMinadoApp extends StatelessWidget {
     campo.adicionarVizinho(campoVizinho);
     campo.adicionarVizinho(campoVizinho2);
 
-    try{
+    try {
       campo.alternarMarcacao();
-    }on ExplosaoException{
-
-    }
+    } on ExplosaoException {}
 
     return Scaffold(
       appBar: ResultadoAppBarWidget(
         venceu: false,
         onReiniciar: _reiniciar,
       ),
-      body: Center(
-        child: CampoWidget(
-          campo: campo,
-          onAbrir: _abrir,
-          onAlternarMarcacao: _alternarMarcacao,
-        ),
-      ),
+      body: Container(
+          child: TabuleiroWidget(
+        tabuleiro: Tabuleiro(linhas: 15, colunas: 15, qtdeBombas: 0),
+        onAbrir: _abrir,
+        onAlternarMarcacao: _alternarMarcacao,
+      )),
     );
   }
 }
